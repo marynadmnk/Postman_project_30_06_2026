@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  api-tests:
+    docker:
+      - image: cimg/node:22.0
+
+    working_directory: ~/project
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            npm install
+
+      - run:
+          name: Create reports folder
+          command: mkdir -p reports
+
+      - run:
+          name: Run Newman Tests
+          command: npm test
+
+      - store_test_results:
+          path: reports
+
+      - store_artifacts:
+          path: reports
+
+workflows:
+  version: 2
+
+  run-api-tests:
+    jobs:
+      - api-tests
